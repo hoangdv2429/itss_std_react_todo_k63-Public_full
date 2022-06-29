@@ -2,6 +2,8 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+
 const firebaseConfig = {
     apiKey: "AIzaSyB6BcIMyDXr58k9UvQpCf07xCJL_J46OtQ",
     authDomain: "todos-4764c.firebaseapp.com",
@@ -12,7 +14,7 @@ const firebaseConfig = {
     measurementId: "G-Q6JCFXT45Y"
 };
 
-firebase.initializeApp(firebaseConfig);
+const app = firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 export const auth = firebase.auth();
 export default firebase;
@@ -62,4 +64,57 @@ export const clearFirebaseItem = async (item) => {
         .catch(function (err) {
             console.log(err);
         });
+};
+
+
+export const uiConfig = {
+    signInFlow: "popup",
+    signInSuccessUrl: "/",
+    signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+};
+
+export const storeUserInfo = async (user) => {
+    const { uid } = user;
+    const userDoc = await db.collection("users").doc(uid).get();
+    if (!userDoc.exists) {
+        await db.collection("users").doc(uid).set({ name: user.displayName });
+        return {
+            name: user.displayName,
+            id: uid,
+        };
+    } else {
+        return {
+            id: uid,
+            ...userDoc.data(),
+        };
+    }
+};
+
+export const updateUser = async (user, image) => {
+    try {
+        const userDoc = await firebase
+            .firestore()
+            .collection("users")
+            .doc(user.id)
+            .get();
+        if (userDoc.exists) {
+            await firebase
+                .firestore()
+                .collection("users")
+                .doc(user.id)
+                .update({ ...userDoc.data(), image: image });
+        }
+    } catch (err) {
+        console.log(err);
+    }
+};
+
+export const uploadImage = async (image) => {
+
+    const storage = getStorage(app);
+
+    const mountainsRef = ref(storage, `images/${image.name}`);
+    await uploadBytesResumable(mountainsRef, image)
+    const imageUrl = await getDownloadURL(mountainsRef)
+    return imageUrl
 };
