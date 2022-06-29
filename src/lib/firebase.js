@@ -32,6 +32,7 @@ export const getFirebaseItems = async () => {
         }
     } catch (err) {
         console.log(err);
+        alert(err);
         return {
             success: false,
             items: []
@@ -44,6 +45,7 @@ export const addFirebaseItem = async (item) => {
         await todoRef.add(item);
     } catch (err) {
         console.log(err);
+        alert(err);
     }
 };
 
@@ -53,6 +55,7 @@ export const updateFirebaseItem = async (item, id) => {
         await todoRef.update(item);
     } catch (err) {
         console.log(err);
+        alert(err);
     }
 };
 
