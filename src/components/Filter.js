@@ -8,19 +8,19 @@ function Filter({ value, onChange }) {
   return (
     <div className="panel-tabs">
       <a
-        href="#"
+        href="/#"
         onClick={handleClick.bind(null, 'ALL')}
-        className={value === 'ALL' ?  'is-active' : ''}
+        className={value === 'ALL' ? 'is-active' : ''}
       >全て</a>
       <a
-        href="#"
+        href="/#"
         onClick={handleClick.bind(null, 'TODO')}
-        className={value === 'TODO' ?  'is-active' : ''}
+        className={value === 'TODO' ? 'is-active' : ''}
       >未完了</a>
       <a
-        href="#"
+        href="/#"
         onClick={handleClick.bind(null, 'DONE')}
-        className={value === 'DONE' ?  'is-active' : ''}
+        className={value === 'DONE' ? 'is-active' : ''}
       >完了済み</a>
     </div>
   );
