@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 /* コンポーネント */
 import TodoItem from './TodoItem';
@@ -13,7 +13,7 @@ import useFirebaseStorage from '../hooks/firebaseStorage';
 
 function Todo() {
   const [items, addItem, updateItem, clearItems] = useFirebaseStorage();
-  
+
   const [filter, setFilter] = React.useState('ALL');
 
   const displayItems = items.filter(item => {
@@ -21,16 +21,16 @@ function Todo() {
     if (filter === 'TODO') return !item.done;
     if (filter === 'DONE') return item.done;
   });
-  
+
   const handleCheck = (changedItem, isCheck) => {
     updateItem(changedItem, isCheck);
   };
-  
+
   const handleAdd = text => {
     addItem({ text, done: false });
   };
-  
-  const handleFilterChange = (value) => {setFilter(value)};
+
+  const handleFilterChange = (value) => { setFilter(value) };
 
   return (
     <article class="panel is-danger">
