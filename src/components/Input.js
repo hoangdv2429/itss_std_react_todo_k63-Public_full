@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Input( { onAdd } ) {
+function Input({ onAdd }) {
   const [text, setText] = React.useState('');
 
   const handleChange = e => setText(e.target.value);

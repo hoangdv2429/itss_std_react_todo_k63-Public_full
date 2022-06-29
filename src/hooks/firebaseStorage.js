@@ -35,9 +35,8 @@ export default function useFirebaseStorage() {
     };
 
     const clearItems = () => {
-        items.map((item) => {
-            clearFirebaseItem(item);
-        });
+        items.map((item) =>
+            clearFirebaseItem(item));
         setItems([]);
     };
 
