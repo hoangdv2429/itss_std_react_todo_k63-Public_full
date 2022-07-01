@@ -38,7 +38,7 @@ function App() {
           <div class="navbar-item">
             <Upload
               userImage={user.image}
-              onSletctedImage={handleImageChanged}
+              onSelectedImage={handleImageChanged}
             />
             {user.name}
           </div>

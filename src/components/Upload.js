@@ -2,17 +2,18 @@ import React, { useState } from "react";
 
 import { uploadImage } from "../lib/firebase";
 
-function Upload({ userImage, onSletctedImage }) {
+function Upload({ userImage, onSelectedImage }) {
     const [isModal, setIsModal] = useState(false);
     const active = isModal ? "is-active" : "";
     const [imageUrl, setImageUrl] = useState(userImage);
 
     const handleImage = async (event) => {
         const image = event.target.files[0];
-        const imageUrl = await uploadImage(image);
-        onSletctedImage(imageUrl);
-        setImageUrl(imageUrl);
-        setIsModal("")
+        const _imageUrl = await uploadImage(image);
+        console.log('got your URL: ', _imageUrl);
+        onSelectedImage(_imageUrl);
+        setImageUrl(_imageUrl);
+        setIsModal("");
     };
 
     const handleClick = () => {
@@ -25,7 +26,7 @@ function Upload({ userImage, onSletctedImage }) {
         } else {
             return (
                 <div>
-                    <img src={imageUrl} />
+                    <img src={imageUrl} alt="Avatar" />
                 </div>
             );
         }
