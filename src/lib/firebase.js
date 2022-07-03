@@ -20,6 +20,7 @@ const db = firebase.firestore();
 export const auth = firebase.auth();
 export default firebase;
 
+
 export const getFirebaseItems = async () => {
     try {
         const snapshot = await db.collection("todos").get();
@@ -116,63 +117,82 @@ export const updateUser = async (user, image) => {
     }
 };
 
+// export const uploadImage = async (image) => {
+
+//     const storage = getStorage(app);
+
+//     const metadata = {
+//         contentType: 'image/jpeg'
+//     };
+
+//     const storageRef = ref(storage, `images/${image.name}`);
+//     const uploadTask = uploadBytesResumable(storageRef, image, metadata);
+
+//     let imageUrl;
+
+
+//     // const imageUrl = await getDownloadURL(storageRef);
+//     // return imageUrl;
+//     // Listen for state changes, errors, and completion of the upload.
+//     uploadTask.on('state_changed',
+//         (snapshot) => {
+//             // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+//             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+//             console.log('Upload is ' + progress + '% done');
+//             switch (snapshot.state) {
+//                 case 'paused':
+//                     console.log('Upload is paused');
+//                     break;
+//                 case 'running':
+//                     console.log('Upload is running');
+//                     break;
+//                 default:
+//                     console.log('should never have to go here - default case of UploadImage');
+//                     break;
+//             }
+//         },
+//         (error) => {
+//             // A full list of error codes is available at
+//             // https://firebase.google.com/docs/storage/web/handle-errors
+//             switch (error.code) {
+//                 case 'storage/unauthorized':
+//                     console.log('User doesn\'t have permission to access the object');
+//                     break;
+//                 case 'storage/canceled':
+//                     console.log('User canceled the upload');
+//                     break;
+//                 case 'storage/unknown':
+//                     console.log('Unknown error occurred, inspect error.serverResponse');
+//                     break;
+//                 default:
+//                     console.log('should never go here: ', error.code, error);
+//             }
+//         },
+//         (imageUrl) => {
+//             console.log("i1: ", imageUrl);
+//             // Upload completed successfully, now we can get the download URL
+//             imageUrl = getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+//                 console.log('File available at', downloadURL);
+//             });
+//             console.log("i2: ", imageUrl);
+//         }
+//     );
+//     return imageUrl;
+// };
+
 export const uploadImage = async (image) => {
-
+    // Create a root reference
     const storage = getStorage(app);
-
-    const metadata = {
-        contentType: 'image/jpeg'
-    };
-
-    const storageRef = ref(storage, `images/${image.name}`);
-    const uploadTask = uploadBytesResumable(storageRef, image, metadata);
-
+    // Create a reference to 'mountains.jpg'
+    const mountainsRef = ref(storage, `images/${image.name}`);
+    await uploadBytesResumable(mountainsRef, image);
     let imageUrl;
-
-    // const imageUrl = await getDownloadURL(storageRef);
-    // return imageUrl;
-    // Listen for state changes, errors, and completion of the upload.
-    uploadTask.on('state_changed',
-        (snapshot) => {
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            switch (snapshot.state) {
-                case 'paused':
-                    console.log('Upload is paused');
-                    break;
-                case 'running':
-                    console.log('Upload is running');
-                    break;
-                default:
-                    console.log('should never have to go here - default case of UploadImage');
-                    break;
-            }
-        },
-        (error) => {
-            // A full list of error codes is available at
-            // https://firebase.google.com/docs/storage/web/handle-errors
-            switch (error.code) {
-                case 'storage/unauthorized':
-                    console.log('User doesn\'t have permission to access the object');
-                    break;
-                case 'storage/canceled':
-                    console.log('User canceled the upload');
-                    break;
-                case 'storage/unknown':
-                    console.log('Unknown error occurred, inspect error.serverResponse');
-                    break;
-                default:
-                    console.log('should never go here: ', error.code, error);
-            }
-        },
-        () => {
-            // Upload completed successfully, now we can get the download URL
-            imageUrl = getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                console.log('File available at', downloadURL);
-            });
-        }
-    );
+    try {
+        imageUrl = await getDownloadURL(mountainsRef);
+    } catch (error) {
+        console.log(error);
+    }
 
     return imageUrl;
 };
+
